@@ -28,6 +28,28 @@ where salary = 123; --Время выполнения 156 ms
 EXPLAIN ANALYSE select * from employee_salary
 where salary > 100 and salary < 125;
 
+--DROP INDEX salary_ind
+--Создадим индекс по полю salary
+CREATE INDEX salary_ind on employee_salary(salary);
+
+EXPLAIN ANALYSE select * from employee_salary
+where salary = 123; 
+
+EXPLAIN ANALYSE select * from employee_salary
+where salary > 100 and salary < 125;
+
+--Пример, когда индекс не будет использован
+EXPLAIN ANALYSE select count(*) from test
+where milesfrommetropolis > 3;
+
+--Создадим индекс
+CREATE INDEX miles_ind ON employee_salary(milesfrommetropolis);
+
+EXPLAIN ANALYSE select count(*) from test
+where milesfrommetropolis > 3
+--Индекс не используется, т.к. данное условие затрагивает почти все строки таблицы
+--примерчик с like
+
 select * from test
 limit 1	
 EXPLAIN ANALYSE select * from test
@@ -38,4 +60,4 @@ EXPLAIN ANALYSE select count(*) from test
 where milesfrommetropolis > 3
 
 select * from test
-limit 10;
+limit 10;d
