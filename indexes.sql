@@ -48,7 +48,7 @@ CREATE INDEX miles_ind ON employee_salary(milesfrommetropolis);
 EXPLAIN ANALYSE select count(*) from test
 where milesfrommetropolis > 3
 --Индекс не используется, т.к. данное условие затрагивает почти все строки таблицы
---like Создадим индекс по несольким полям
+--Создадим индекс по несольким полям
 CREATE INDEX job_deg_ind ON employee_salary(jobtype, degree);
 
 EXPLAIN ANALYSE select * from employee_salary
