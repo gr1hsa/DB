@@ -39,7 +39,7 @@ EXPLAIN ANALYSE select * from employee_salary
 where salary > 100 and salary < 125;
 
 --Пример, когда индекс не будет использован
-EXPLAIN ANALYSE select count(*) from test
+EXPLAIN ANALYSE select count(*) from employee_salary
 where milesfrommetropolis > 3;
 
 --Создадим индекс
@@ -48,16 +48,25 @@ CREATE INDEX miles_ind ON employee_salary(milesfrommetropolis);
 EXPLAIN ANALYSE select count(*) from test
 where milesfrommetropolis > 3
 --Индекс не используется, т.к. данное условие затрагивает почти все строки таблицы
---примерчик с like
+--like Создадим индекс по несольким полям
+CREATE INDEX job_deg_ind ON employee_salary(jobtype, degree);
 
-select * from test
-limit 1	
-EXPLAIN ANALYSE select * from test
-where milesfrommetropolis > 22 and milesfrommetropolis < 33;
-create index aboba2 on test(milesfrommetropolis)
-drop index aboba2
-EXPLAIN ANALYSE select count(*) from test
-where milesfrommetropolis > 3
+EXPLAIN ANALYSE select * from employee_salary
+WHERE jobtype = 'MANAGER' and degree LIKE 'HIGH%';
+--DROP INDEX job_deg_ind;
 
-select * from test
-limit 10;d
+-- Создадим покрывающий индекс
+CREATE INDEX years_inc_industry_ind ON employee_salary(yearsexperience) INCLUDE (industry);
+EXPLAIN ANALYSE select industry from employee_salary
+WHERE yearsexperience = 22;
+--DROP INDEX years_inc_industry_ind
+
+--Создадим hash индекс, используется только для '='
+CREATE INDEX major_ind ON employee_salary USING HASH (major);
+
+EXPLAIN ANALYSE select * from employee_salary
+WHERE major = 'BIOLOGY';
+
+--DROP INDEX major_ind;
+
+
