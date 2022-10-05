@@ -23,7 +23,7 @@ Limit 5;
 
 ---Сделаем запрос по полю salary и посмотрим время выполнения
 EXPLAIN ANALYSE select * from employee_salary
-where salary = 123; --Время выполнения 156 ms
+where salary = 123; 
 
 EXPLAIN ANALYSE select * from employee_salary
 where salary > 100 and salary < 125;
@@ -53,6 +53,12 @@ CREATE INDEX job_deg_ind ON employee_salary(jobtype, degree);
 
 EXPLAIN ANALYSE select * from employee_salary
 WHERE jobtype = 'MANAGER' and degree LIKE 'HIGH%';
+
+EXPLAIN ANALYSE select * from employee_salary
+WHERE jobtype = 'MANAGER';
+
+EXPLAIN ANALYSE select * from employee_salary
+WHERE degree = 'HIGH_SCHOOL';
 --DROP INDEX job_deg_ind;
 
 -- Создадим покрывающий индекс
@@ -61,12 +67,6 @@ EXPLAIN ANALYSE select industry from employee_salary
 WHERE yearsexperience = 22;
 --DROP INDEX years_inc_industry_ind
 
---Создадим hash индекс, используется только для '='
-CREATE INDEX major_ind ON employee_salary USING HASH (major);
 
-EXPLAIN ANALYSE select * from employee_salary
-WHERE major = 'BIOLOGY';
-
---DROP INDEX major_ind;
 
 
